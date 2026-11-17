@@ -55,6 +55,19 @@ function projectPages(): Plugin {
   }
 }
 
-export default defineConfig({
-  plugins: [react(), projectPages()],
-})
+export default defineConfig(({ mode }) =>
+  mode === 'embed'
+    ? {
+        // Versão de visualização em um único arquivo (ver scripts/build-embed.mjs).
+        plugins: [react()],
+        base: './',
+        define: { 'import.meta.env.VITE_MEMORY_ROUTER': JSON.stringify('1') },
+        build: {
+          outDir: 'dist-embed',
+          assetsInlineLimit: Number.MAX_SAFE_INTEGER,
+          cssCodeSplit: false,
+          rollupOptions: { output: { inlineDynamicImports: true } },
+        },
+      }
+    : { plugins: [react(), projectPages()] },
+)

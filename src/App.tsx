@@ -6,7 +6,7 @@ import { ProjectPage } from './pages/ProjectPage'
 import { NotFound } from './pages/NotFound'
 import { findProject } from './content/projects'
 import { site } from './content/site'
-import { usePathname } from './lib/router'
+import { currentHash, scrollToHash, usePathname } from './lib/router'
 import { useReveal } from './lib/motion'
 
 function route(path: string) {
@@ -30,10 +30,8 @@ export default function App() {
 
   // Ao trocar de página: vai para a âncora (se houver) ou para o topo.
   useEffect(() => {
-    const hash = window.location.hash.slice(1)
-    const el = hash ? document.getElementById(decodeURIComponent(hash)) : null
-    if (el) el.scrollIntoView()
-    else window.scrollTo(0, 0)
+    window.scrollTo(0, 0)
+    scrollToHash(currentHash())
   }, [path])
 
   useReveal(path)
