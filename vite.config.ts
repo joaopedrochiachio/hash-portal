@@ -14,6 +14,9 @@ const SITE_URL = (
   (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:5173')
 ).replace(/\/$/, '')
 
+/** Subcaminho do deploy. GitHub Pages: "/hash-portal/". Vercel: "/". */
+const BASE = process.env.BASE_PATH ?? '/'
+
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 
 const fill = (html: string, title: string, description: string, path: string) =>
@@ -69,5 +72,5 @@ export default defineConfig(({ mode }) =>
           rollupOptions: { output: { inlineDynamicImports: true } },
         },
       }
-    : { plugins: [react(), projectPages()] },
+    : { base: BASE, plugins: [react(), projectPages()] },
 )
