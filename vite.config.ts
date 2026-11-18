@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type Plugin } from 'vite'
-import { hasPage, projects } from './src/content/projects.ts'
+import { projects } from './src/content/projects.ts'
 import { site } from './src/content/site.ts'
 
 /**
@@ -44,7 +44,7 @@ function projectPages(): Plugin {
     },
     closeBundle() {
       if (!template) return
-      for (const p of projects.filter(hasPage)) {
+      for (const p of projects) {
         const dir = resolve(outDir, 'projetos', p.slug)
         mkdirSync(dir, { recursive: true })
         writeFileSync(resolve(dir, 'index.html'), fill(template, `${p.name} · Hash`, p.summary, `/projetos/${p.slug}`))

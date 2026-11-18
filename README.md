@@ -16,13 +16,13 @@ npm run lint
 
 | O quê | Arquivo |
 | --- | --- |
-| Projetos (ecossistema, referência, Lab) | `src/content/projects.ts` |
+| Projetos (ecossistema e referência) e Modelos | `src/content/projects.ts` |
 | Equipe, e-mail, lista de espera, redes | `src/content/site.ts` |
 | Cores, tipografia, espaçamentos | `src/styles.css` (tokens no topo) |
 | Símbolo # | `src/components/HashMark.tsx` (estático) e `Logo3D.tsx` (3D) |
 
 **Novo projeto** = um objeto novo em `projects.ts`. A home, o card e a página
-`/projetos/[slug]` aparecem sozinhos. Imagens vão em `public/` e entram no campo `images` (com `alt`).
+`/projetos/[slug]` aparecem sozinhos. Preencha `live` com o endereço no ar para ganhar o botão "Visitar". Imagens vão em `public/` e entram no campo `images` (com `alt`).
 
 ## Decisões
 
@@ -35,7 +35,8 @@ npm run lint
 
 ## Pendências de conteúdo (TODO)
 
-- Descrições de DevWorld, Vitality AI e NASA Space Apps.
+- Descrição do DevWorld (texto do Leo).
+- Link e descrição do Vitality AI.
+- Link público do Azimuth (NASA Space Apps), se houver.
 - Fotos, funções e links de João Pedro e Leo.
 - E-mail de contato, link da lista de espera e redes sociais.
-- Experimentos reais do Lab (hoje são 3 placeholders).

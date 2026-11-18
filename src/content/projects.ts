@@ -11,9 +11,8 @@ export type ProjectStatus = 'ideia' | 'em-construcao' | 'beta' | 'lancado'
 /**
  * - `ecossistema`: próximos produtos da Hash (seção Ecossistema)
  * - `referencia`: projetos já feitos (seção Projetos de referência)
- * - `lab`: experimentos (seção Lab)
  */
-export type ProjectKind = 'ecossistema' | 'referencia' | 'lab'
+export type ProjectKind = 'ecossistema' | 'referencia'
 
 export interface ProjectLink {
   label: string
@@ -44,6 +43,9 @@ export interface Project {
   description: string[]
   /** Pontos rápidos exibidos em lista na página do projeto. */
   highlights?: string[]
+  /** Endereço do projeto no ar. Ganha destaque no card e na página. */
+  live?: string
+  /** Links extras (código, documentação...). */
   links?: ProjectLink[]
   images?: ProjectImage[]
   /** Rodapé do card em mono, ex.: "Base: Vídeos Molinare". */
@@ -52,15 +54,13 @@ export interface Project {
   featured?: boolean
   /** Mostra o botão "Entrar na lista de espera". */
   waitlist?: boolean
-  /** Cria a página /projetos/[slug]. Padrão: true, exceto no Lab. */
-  hasPage?: boolean
 }
 
 export const statusLabel: Record<ProjectStatus, string> = {
   ideia: 'Ideia',
   'em-construcao': 'Em construção',
   beta: 'Beta',
-  lancado: 'Lançado',
+  lancado: 'No ar',
 }
 
 /** Cores dos chips da família Hash. */
@@ -73,7 +73,7 @@ export const chips = {
   devworld: '#B83AD6',
   nasa: '#0088FF',
   vitality: '#F07A10',
-  lab: '#8E8E93',
+  refrinova: '#1597B8',
 } as const
 
 export const projects: Project[] = [
@@ -140,7 +140,8 @@ export const projects: Project[] = [
     description: [
       'O WalletAI organiza suas finanças com ajuda da IA. Foi dele que nasceu a linguagem visual da Hash: materiais claros, relevo suave e o chip no centro do símbolo.',
     ],
-    links: [{ label: 'Abrir WalletAI', url: 'https://wallet-app-neon-ten.vercel.app' }],
+    footnote: 'App com IA',
+    live: 'https://wallet-app-neon-ten.vercel.app',
   },
   {
     slug: 'devworld',
@@ -149,9 +150,11 @@ export const projects: Project[] = [
     kind: 'referencia',
     status: 'lancado',
     chip: chips.devworld,
-    // TODO: descrição do DevWorld
-    summary: 'Detalhes do projeto em breve.',
-    description: ['Detalhes do projeto em breve.'],
+    // TODO: descrição do DevWorld (texto do Leo)
+    summary: 'Portal criado pelo Leo, já no ar.',
+    description: ['Portal criado pelo Leo, já no ar. Entre e explore.'],
+    footnote: 'Portal',
+    live: 'https://devworldbr.vercel.app/explorar',
   },
   {
     slug: 'vitality-ai',
@@ -160,57 +163,86 @@ export const projects: Project[] = [
     kind: 'referencia',
     status: 'lancado',
     chip: chips.vitality,
-    // TODO: descrição do Vitality AI
-    summary: 'Detalhes do projeto em breve.',
-    description: ['Detalhes do projeto em breve.'],
+    // TODO: descrição e link do Vitality AI (preencher `live`)
+    summary: 'Projeto com IA, já no ar.',
+    description: ['Projeto com IA, já no ar. Detalhes em breve.'],
+    footnote: 'Produto com IA',
   },
   {
-    slug: 'nasa-space-apps',
-    name: 'NASA Space Apps',
-    tag: '#hackathon',
+    slug: 'azimuth',
+    name: 'Azimuth',
+    tag: '#nasa',
     kind: 'referencia',
     status: 'lancado',
     chip: chips.nasa,
-    // TODO: descrição do projeto do hackathon
-    summary: 'Projeto feito no hackathon NASA Space Apps.',
-    description: ['Projeto desenvolvido durante o hackathon NASA Space Apps. Detalhes em breve.'],
-  },
-
-  // ─── Lab (placeholders) ─────────────────────────────────────
-  {
-    slug: 'experimento-01',
-    name: 'Experimento 01',
-    tag: '#lab',
-    kind: 'lab',
-    status: 'ideia',
-    chip: chips.lab,
-    summary: 'Um protótipo novo está a caminho.',
-    description: [],
-  },
-  {
-    slug: 'experimento-02',
-    name: 'Experimento 02',
-    tag: '#lab',
-    kind: 'lab',
-    status: 'ideia',
-    chip: chips.lab,
-    summary: 'Um protótipo novo está a caminho.',
-    description: [],
+    summary: 'Mapa de Marte que mostra ao astronauta a rota mais segura e sempre o caminho de volta.',
+    description: [
+      'Feito no NASA Space Apps Challenge 2026, para o desafio Interplanetary Survival Guide: Martian Map.',
+      'Um mapa em camadas da Cratera Jezero, montado com oito tipos de dados reais da NASA. O astronauta planeja a rota, caminha acompanhando oxigênio e radiação e, se algo der errado, entra no modo Resgate.',
+      'A assistente Azimuth responde por texto e voz e continua funcionando mesmo sem conexão com a IA.',
+      'Time: Leo, João Pedro e Maria Clara.',
+    ],
+    highlights: [
+      'Marte em 3D interativo',
+      'Planejar → Caminhar → Resgate',
+      'Assistente com IA, por texto e voz',
+      '8 tipos de dados da NASA',
+    ],
+    footnote: 'NASA Space Apps 2026',
+    // TODO: link público do site, se houver (preencher `live`)
+    links: [{ label: 'Ver código', url: 'https://github.com/leolvgomes/NSA-2026' }],
   },
   {
-    slug: 'experimento-03',
-    name: 'Experimento 03',
-    tag: '#lab',
-    kind: 'lab',
-    status: 'ideia',
-    chip: chips.lab,
-    summary: 'Um protótipo novo está a caminho.',
-    description: [],
+    slug: 'refrinova',
+    name: 'Refrinova',
+    tag: '#refrinova',
+    kind: 'referencia',
+    status: 'lancado',
+    chip: chips.refrinova,
+    summary: 'Site institucional de uma empresa de engenharia térmica e refrigeração industrial.',
+    description: [
+      'Landing page e site institucional da Refrinova: serviços, cases, a empresa e contato direto pelo WhatsApp para pedir orçamento.',
+      'Leve, rápido e responsivo, sem etapa de build, com animações de entrada e carrossel de projetos.',
+    ],
+    highlights: ['Landing page para cliente', 'Orçamento direto pelo WhatsApp', 'Carrossel de cases'],
+    footnote: 'Landing page',
+    live: 'https://refrinova.ind.br',
   },
 ]
 
-export const hasPage = (p: Project) => p.hasPage ?? p.kind !== 'lab'
+/**
+ * Modelos: os tipos de projeto que a gente entrega, cada um com um exemplo real no ar.
+ * `example` aponta para o slug de um projeto acima.
+ */
+export interface Model {
+  name: string
+  text: string
+  example: string
+}
+
+export const models: Model[] = [
+  {
+    name: 'Landing page',
+    text: 'Um site rápido que apresenta a empresa e transforma visita em contato.',
+    example: 'refrinova',
+  },
+  {
+    name: 'App com IA',
+    text: 'Um assistente que faz o trabalho chato: organiza, calcula e sugere.',
+    example: 'walletai',
+  },
+  {
+    name: 'Portal',
+    text: 'Várias páginas, conteúdo para explorar e navegação que não se perde.',
+    example: 'devworld',
+  },
+  {
+    name: 'Experiência interativa',
+    text: 'Dados difíceis viram algo que se usa com as mãos: 3D, mapa e assistente.',
+    example: 'azimuth',
+  },
+]
 
 export const projectsByKind = (kind: ProjectKind) => projects.filter((p) => p.kind === kind)
 
-export const findProject = (slug: string) => projects.find((p) => p.slug === slug && hasPage(p))
+export const findProject = (slug: string) => projects.find((p) => p.slug === slug)

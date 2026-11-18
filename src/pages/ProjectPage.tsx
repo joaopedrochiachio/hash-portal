@@ -1,4 +1,4 @@
-import { findProject, hasPage, projects } from '../content/projects'
+import { findProject, projects } from '../content/projects'
 import { waitlistHref } from '../content/site'
 import { HashMark } from '../components/HashMark'
 import { ProjectCard } from '../components/ProjectCard'
@@ -10,7 +10,7 @@ export function ProjectPage({ slug }: { slug: string }) {
   const project = findProject(slug)
   if (!project) return <NotFound />
 
-  const related = projects.filter((p) => p.kind === project.kind && p.slug !== project.slug && hasPage(p)).slice(0, 3)
+  const related = projects.filter((p) => p.kind === project.kind && p.slug !== project.slug).slice(0, 3)
   const cta = project.waitlist ? waitlistHref() : undefined
 
   return (
@@ -31,24 +31,32 @@ export function ProjectPage({ slug }: { slug: string }) {
         <h1>{project.name}</h1>
         <p className="project__summary">{project.summary}</p>
 
-        {(project.links?.length || cta) && (
+        {project.live && (
+          <a className="liveurl" href={project.live} target="_blank" rel="noopener noreferrer">
+            <span className="live-dot" aria-hidden="true" />
+            <span className="mono-label">No ar</span>
+            <span className="liveurl__host">{hostOf(project.live)}</span>
+            <Arrow external />
+          </a>
+        )}
+
+        {(project.live || project.links?.length || cta) && (
           <div className="hero__ctas">
-            {project.links?.map((l, i) => (
-              <a
-                key={l.url}
-                href={l.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`btn ${i === 0 ? 'btn--primary' : 'btn--ghost'}`}
-              >
-                {l.label} <Arrow external />
+            {project.live && (
+              <a href={project.live} target="_blank" rel="noopener noreferrer" className="btn btn--primary">
+                Visitar {project.name} <Arrow external />
               </a>
-            ))}
+            )}
             {cta && (
               <a href={cta} className="btn btn--primary">
                 Entrar na lista de espera
               </a>
             )}
+            {project.links?.map((l) => (
+              <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" className="btn btn--ghost">
+                {l.label} <Arrow external />
+              </a>
+            ))}
           </div>
         )}
       </header>
@@ -100,4 +108,9 @@ export function ProjectPage({ slug }: { slug: string }) {
       )}
     </main>
   )
+}
+
+const hostOf = (url: string) => {
+  const u = new URL(url)
+  return (u.host + u.pathname).replace(/^www\./, '').replace(/\/$/, '')
 }
