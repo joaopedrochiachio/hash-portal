@@ -2,13 +2,22 @@ import { useSyncExternalStore } from 'react'
 
 /**
  * Roteador mínimo baseado na History API (evita uma dependência inteira).
- * Com VITE_MEMORY_ROUTER=1 (build de visualização embutida) a rota fica só
- * em memória e a URL não muda.
+ * - Respeita o subcaminho do deploy (import.meta.env.BASE_URL, ex.: "/hash-portal/").
+ *   As rotas do app são sempre escritas sem ele ("/projetos/walletai").
+ * - Com VITE_MEMORY_ROUTER=1 (build de visualização embutida) a rota fica só
+ *   em memória e a URL não muda.
  */
 
 const MEMORY = import.meta.env.VITE_MEMORY_ROUTER === '1'
+const BASE = MEMORY ? '/' : import.meta.env.BASE_URL.replace(/\/$/, '')
 const memory = { path: '/', hash: '' }
 const listeners = new Set<() => void>()
+
+/** Rota do app → URL real (com o subcaminho). */
+export const withBase = (to: string) => (to.startsWith('/') && BASE !== '/' ? BASE + to : to)
+
+const stripBase = (path: string) =>
+  BASE !== '/' && path.startsWith(BASE) ? path.slice(BASE.length) || '/' : path
 
 const subscribe = (cb: () => void) => {
   if (MEMORY) {
@@ -19,7 +28,7 @@ const subscribe = (cb: () => void) => {
   return () => window.removeEventListener('popstate', cb)
 }
 
-export const currentPath = () => (MEMORY ? memory.path : window.location.pathname)
+export const currentPath = () => (MEMORY ? memory.path : stripBase(window.location.pathname))
 export const currentHash = () => (MEMORY ? memory.hash : window.location.hash)
 
 export const usePathname = () => useSyncExternalStore(subscribe, currentPath, () => '/')
@@ -32,7 +41,7 @@ export function navigate(to: string) {
     listeners.forEach((l) => l())
     return
   }
-  window.history.pushState(null, '', to)
+  window.history.pushState(null, '', withBase(to))
   window.dispatchEvent(new PopStateEvent('popstate'))
 }
 

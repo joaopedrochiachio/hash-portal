@@ -1,5 +1,5 @@
 import type { AnchorHTMLAttributes, MouseEvent } from 'react'
-import { currentPath, isMemoryRouter, navigate, scrollToHash } from '../lib/router'
+import { currentPath, isMemoryRouter, navigate, scrollToHash, withBase } from '../lib/router'
 
 type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }
 
@@ -21,5 +21,5 @@ export function Link({ href, onClick, ...rest }: LinkProps) {
     e.preventDefault()
     navigate(url.pathname + url.hash)
   }
-  return <a href={href} onClick={handle} {...rest} />
+  return <a href={withBase(href)} onClick={handle} {...rest} />
 }

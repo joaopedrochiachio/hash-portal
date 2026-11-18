@@ -12,6 +12,12 @@ npm run build    # gera dist/ (inclui um HTML por projeto com meta tags própria
 npm run lint
 ```
 
+## Deploy
+
+- **GitHub Pages** (no ar): cada push na `main` publica em https://joaopedrochiachio.github.io/hash-portal/
+  pelo workflow `.github/workflows/pages.yml`. O build usa `BASE_PATH=/hash-portal/`.
+- **Vercel** (opcional): funciona sem configuração extra (`vercel.json`), com o site na raiz do domínio.
+
 ## Onde mexer
 
 | O quê | Arquivo |
