@@ -569,11 +569,12 @@ h3 {
 
 .grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 @media (min-width: 640px) {
   .grid--2 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (min-width: 768px) {
@@ -582,6 +583,9 @@ h3 {
   }
 }
 @media (min-width: 1100px) {
+  .grid--lg-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
   .grid--lg-4 {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -700,30 +704,152 @@ h3 {
     background-color 0.25s,
     color 0.25s;
 }
-.pcard--lab {
-  background: transparent;
-  box-shadow: none;
-  border: 1px dashed rgba(0, 0, 0, 0.14);
+.pcard__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* O título é o link; ::after estica a área de toque para o card inteiro. */
+.pcard__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.pcard__link:focus-visible {
+  outline: none;
+}
+.pcard:has(.pcard__link:focus-visible) {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+/* Botão "Visitar": fica acima do link esticado. */
+.pcard__live {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--label);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s,
+    transform 0.2s var(--ease);
+}
+.pcard__live:hover {
+  background: var(--blue-btn);
+}
+.pcard__live:active {
+  transform: scale(0.97);
+}
+.pcard__live:hover .arrow {
+  transform: translate(1px, -1px);
 }
 @media (hover: hover) {
-  .pcard--link:hover {
+  .pcard:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-hover);
   }
-  .pcard--link:hover .pcard__mark {
+  .pcard:hover .pcard__mark {
     transform: rotate(-6deg) scale(1.04);
   }
-  .pcard--link:hover .pcard__go {
+  .pcard:has(.pcard__link:hover) .pcard__go {
     background: var(--blue-btn);
     color: #fff;
   }
-  .pcard--link:hover .arrow,
+  .pcard:has(.pcard__link:hover) .pcard__go .arrow,
   .btn:hover .arrow {
     transform: translateX(2px);
   }
 }
-.pcard--link:active {
-  transform: scale(0.99);
+@media (min-width: 640px) {
+  .pcard--wide {
+    grid-column: span 2;
+  }
+  .pcard--wide .pcard__title {
+    font-size: clamp(30px, 3.4vw, 40px);
+  }
+  .pcard--wide .pcard__summary {
+    font-size: 18px;
+    max-width: 30em;
+  }
+}
+
+/* Modelos */
+.model {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding: 28px;
+}
+.model__text {
+  max-width: 30em;
+}
+.model__title {
+  font-size: clamp(24px, 2.6vw, 30px);
+  line-height: 1.15;
+}
+.model__text {
+  color: var(--ink-2);
+  font-size: 16px;
+}
+.model__example {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding: 12px;
+  border-radius: 20px;
+  background: var(--mist);
+}
+.model__example-name {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+.model__example-name a {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.model__example-name a:hover {
+  color: var(--blue-ink);
+}
+.model .mono-label + .model__title {
+  margin-top: 4px;
+}
+
+/* Barra "No ar" na página do projeto */
+.liveurl {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--ceramic);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  transition: border-color 0.2s;
+}
+.liveurl:hover {
+  border-color: rgba(0, 0, 0, 0.16);
+}
+.liveurl__host {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 13px;
 }
 
 /* Destaque: Hash Videos */

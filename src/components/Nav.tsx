@@ -7,7 +7,7 @@ const items = [
   { href: '/#quem-somos', label: 'Quem somos' },
   { href: '/#ecossistema', label: 'Ecossistema' },
   { href: '/#projetos', label: 'Projetos' },
-  { href: '/#lab', label: 'Lab' },
+  { href: '/#modelos', label: 'Modelos' },
 ]
 
 export function Nav() {

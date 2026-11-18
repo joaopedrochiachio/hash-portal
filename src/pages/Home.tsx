@@ -1,8 +1,8 @@
 import { lazy, Suspense } from 'react'
-import { projectsByKind, type Project } from '../content/projects'
+import { findProject, models, projectsByKind, type Project } from '../content/projects'
 import { site, waitlistHref, type TeamMember } from '../content/site'
 import { HashMark } from '../components/HashMark'
-import { ProjectCard } from '../components/ProjectCard'
+import { ModelCard, ProjectCard } from '../components/ProjectCard'
 import { Arrow, SectionHeader, StatusPill } from '../components/ui'
 import { Link } from '../components/Link'
 
@@ -64,28 +64,29 @@ export function Home() {
           id="projetos"
           index="03"
           label="Projetos de referência"
-          title="O que já construímos"
-          aside="Os projetos que deram origem à Hash, da linguagem visual ao código."
+          title="O que já está no ar"
+          aside="Projetos que a gente construiu e que você pode abrir agora. Toque em Visitar para ir direto ao site."
         />
-        <div className="grid grid--2 grid--lg-4">
+        <div className="grid grid--2 grid--lg-3">
           {projectsByKind('referencia').map((p) => (
-            <ProjectCard key={p.slug} project={p} />
+            <ProjectCard key={p.slug} project={p} wide={p.featured} />
           ))}
         </div>
       </section>
 
-      <section className="section container" aria-labelledby="lab">
+      <section className="section container" aria-labelledby="modelos">
         <SectionHeader
-          id="lab"
+          id="modelos"
           index="04"
-          label="Lab"
-          title="Experimentos"
-          aside="Protótipos rápidos. Alguns viram produto, outros viram aprendizado."
+          label="Modelos"
+          title="O que a gente sabe fazer"
+          aside="Cada modelo tem um exemplo real, feito por nós e já no ar."
         />
-        <div className="grid grid--3">
-          {projectsByKind('lab').map((p) => (
-            <ProjectCard key={p.slug} project={p} />
-          ))}
+        <div className="grid grid--2">
+          {models.map((m) => {
+            const example = findProject(m.example)
+            return example ? <ModelCard key={m.name} name={m.name} text={m.text} example={example} /> : null
+          })}
         </div>
       </section>
     </main>
